@@ -1,7 +1,7 @@
 <script>
+    import {score} from "./store.js"
     export let question;
-    export let nextQuestion;
-    export let addToScore
+    export let nextQuestion; 
     let isCorrect
     let isAnswered = false
     let answers = question.incorrect_answers.map(answer => {
@@ -29,18 +29,30 @@
             isAnswered = true
             isCorrect = correct
             if(correct) {
-                addToScore()
+                score.update((val) => val + 1)
             }
         }
     }
 
 </script>
 
+<style>
+    h5 {
+        color: red
+    }
+    h5.isCorrect {
+        color: rgb(236, 181, 0)
+    }
+    .answer {
+        display: block
+    }
+</style>
+
 <h3>
     {@html question.question}
 </h3>
 {#if isAnswered}
-<h5>
+<h5 class:isCorrect>
     {#if isCorrect}
     You got it right!
     {:else}
@@ -49,7 +61,7 @@
 </h5>
 {/if}
 {#each allAnswers as answer}
-    <button disabled={isAnswered} on:click={() => checkQuestion(answer.correct)}>
+    <button class="answer" disabled={isAnswered} on:click={() => checkQuestion(answer.correct)}>
         {@html answer.answer} 
     </button>
     {/each}
